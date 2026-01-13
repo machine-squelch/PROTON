@@ -28,16 +28,12 @@ export class QuantumAI {
   }
 
   private static buildPrompt(atom: AtomType, subject: EntityType, params: WaveParams) {
-    // Keep the cinematic sci-fi aesthetic aligned with the old Gemini outputs, but avoid "label:" phrasing
-    // that some image models can misread.
-    return [
-      `Cinematic, hyper-detailed 3D visualization of a quantum wavefunction collapse`,
-      `Shimmering ${atom} atom probability field (lambda ${params.wavelength.toFixed(2)}, psi ${params.amplitude.toFixed(2)})`,
-      `Turquoise and electric emerald liquid-light energy streams coalesce into a ${subject}`,
-      `Atmospheric high-tech physics lab, holographic data, volumetric lighting, ray-traced reflections`,
-      `8k, masterwork, sharp focus, filmic contrast`,
-      `Non-human anatomy, creature-specific limbs, no bipedal stance`
-    ].join(". ");
+    // 2026 best practices: natural language, clear subject, structured hierarchy
+    // Structure: subject + context + setting + lighting + technical quality
+    const intensity = params.wavelength > 1.5 ? 'intense' : params.wavelength < 0.8 ? 'subtle' : 'moderate';
+    const density = params.amplitude > 1.5 ? 'dense' : params.amplitude < 0.8 ? 'sparse' : 'flowing';
+    
+    return `A ${subject} materializing from ${intensity} quantum energy waves, ${density} streams of turquoise and emerald light converging around ${atom} atoms. Set in a futuristic physics laboratory with holographic displays and volumetric lighting. Cinematic composition, ray-traced reflections, 8k ultra-detailed, atmospheric depth.`;
   }
 
   private static parseImage(data: any) {
@@ -161,7 +157,7 @@ export class QuantumAI {
       samples: SD_SAMPLES,
       seed,
       negative_prompt:
-        "person, human, man, woman, humanoid, standing person, bipedal stance, human legs, human feet, full body human, realistic human figure, realistic male, realistic female, human pose, human torso",
+        "blurry, low quality, watermark, text, logo, deformed, disfigured, bad anatomy, extra limbs, cropped, out of frame",
       key: SD_API_KEY
     };
 
