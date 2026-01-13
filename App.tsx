@@ -607,6 +607,7 @@ const App: React.FC = () => {
                   {!selfieData && !selfieConsent && <p className="text-[11px] text-gray-500 mt-1">Enable consent to attach a photo.</p>}
                 </div>
                 */}
+                {/* Note: handleSelfieUpload is intentionally kept defined for when the selfie feature is re-enabled. */}
               </div>
             </div>
 
