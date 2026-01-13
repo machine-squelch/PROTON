@@ -564,6 +564,7 @@ const App: React.FC = () => {
                   </button>
                   <p className="text-[11px] text-gray-500">Softens motion/glow for gentler viewing.</p>
                 </div>
+                {/* TODO: Selfie card temporarily disabled - re-enable when feature is ready
                 <div className="bg-white/5 rounded-2xl p-3 border border-white/5">
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-[10px] uppercase font-black tracking-[0.2em] text-gray-300">Selfie Merge (optional)</p>
@@ -605,6 +606,7 @@ const App: React.FC = () => {
                   {(selfieUrl.trim() || selfieData) && <p className="text-[11px] text-emerald-400 mt-1">Selfie attached.</p>}
                   {!selfieData && !selfieConsent && <p className="text-[11px] text-gray-500 mt-1">Enable consent to attach a photo.</p>}
                 </div>
+                */}
               </div>
             </div>
 
