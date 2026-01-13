@@ -3,7 +3,6 @@ import { Canvas, useFrame, ThreeElements } from '@react-three/fiber';
 import { OrbitControls, Stars, Float, MeshDistortMaterial, Points, PointMaterial, Trail } from '@react-three/drei';
 import * as THREE from 'three';
 import { AtomType, ATOM_CONFIGS, WaveParams } from '../types';
-import { useThree } from '@react-three/fiber';
 
 // Correctly extend React.JSX IntrinsicElements to include Three.js elements supported by @react-three/fiber.
 declare global {
@@ -193,14 +192,13 @@ const QuantumSurface = ({ params, active }: { params: WaveParams, active: boolea
   );
 };
 
-const ProbabilityWave = ({ active, params, comfortMode }: { active: boolean, params: WaveParams, comfortMode: boolean }) => {
+const ProbabilityWave = ({ active, params }: { active: boolean, params: WaveParams }) => {
   const meshRef = useRef<THREE.Mesh>(null!);
   
   useFrame((state) => {
     if (meshRef.current) {
-      const factor = comfortMode ? 0.6 : 1;
-      meshRef.current.rotation.y += 0.01 * factor;
-      const s = 1 + Math.sin(state.clock.getElapsedTime() * 2 * factor) * 0.05 * params.amplitude;
+      meshRef.current.rotation.y += 0.01;
+      const s = 1 + Math.sin(state.clock.getElapsedTime() * 2) * 0.05 * params.amplitude;
       meshRef.current.scale.set(s, s, s);
     }
   });
@@ -222,7 +220,7 @@ const ProbabilityWave = ({ active, params, comfortMode }: { active: boolean, par
   );
 };
 
-const BackgroundField = ({ params, comfortMode }: { params: WaveParams; comfortMode: boolean }) => {
+const BackgroundField = ({ params }: { params: WaveParams }) => {
   const pointsRef = useRef<THREE.Points>(null!);
   const [positions] = useMemo(() => {
     const pos = new Float32Array(3000 * 3);
@@ -236,10 +234,9 @@ const BackgroundField = ({ params, comfortMode }: { params: WaveParams; comfortM
 
   useFrame((state) => {
     if (pointsRef.current) {
-      const factor = comfortMode ? 0.5 : 1;
-      pointsRef.current.rotation.y += 0.0004 * params.wavelength * factor;
-      pointsRef.current.rotation.z += 0.0001 * params.amplitude * factor;
-      pointsRef.current.position.y = Math.sin(state.clock.getElapsedTime() * 0.25 * factor) * 0.4 * params.amplitude;
+      pointsRef.current.rotation.y += 0.0004 * params.wavelength;
+      pointsRef.current.rotation.z += 0.0001 * params.amplitude;
+      pointsRef.current.position.y = Math.sin(state.clock.getElapsedTime() * 0.25) * 0.4 * params.amplitude;
     }
   });
 
@@ -290,31 +287,12 @@ interface AtomSceneProps {
   atomType: AtomType;
   isCollapsing: boolean;
   params: WaveParams;
-  comfortMode: boolean;
 }
 
-const ComfortBreath = ({ comfortMode }: { comfortMode: boolean }) => {
-  const { camera } = useThree();
-  const base = React.useRef(camera.position.clone());
 
-  useFrame(({ clock }) => {
-    const t = clock.elapsedTime;
-    // Smooth sinusoidal breath: 0..1
-    const breath = 0.5 * (Math.sin((t * (2 * Math.PI)) / 10 - Math.PI / 2) + 1); // ~10s cycle
-    const zoomFactor = comfortMode ? 1 - 0.2 * breath : 1;
-    const target = base.current.clone().multiplyScalar(zoomFactor);
-    if (!Number.isFinite(target.x) || !Number.isFinite(target.y) || !Number.isFinite(target.z)) return;
-    camera.position.lerp(target, 0.08);
-    camera.lookAt(0, 0, 0);
-  });
 
-  return null;
-};
-
-const AtomScene = ({ atomType, isCollapsing, params, comfortMode }: AtomSceneProps) => {
+const AtomScene = ({ atomType, isCollapsing, params }: AtomSceneProps) => {
   const config = useMemo(() => ATOM_CONFIGS[atomType], [atomType]);
-  const motionFactor = comfortMode ? 0.6 : 1;
-  const glowFactor = comfortMode ? 0.85 : 1;
 
   const orbitalConfigs = useMemo(() => {
     return [
@@ -328,15 +306,14 @@ const AtomScene = ({ atomType, isCollapsing, params, comfortMode }: AtomScenePro
     <div className="w-full h-full relative">
       <Canvas camera={{ position: [14, 8, 14], fov: 38 }} gl={{ antialias: true }}>
         <color attach="background" args={["#020104"]} />
-        <ComfortBreath comfortMode={comfortMode} />
         <color attach="background" args={["#020104"]} />
         <ambientLight intensity={0.6} />
         <pointLight position={[15, 15, 15]} intensity={3} />
-        <Stars radius={120} depth={60} count={7000} factor={7} saturation={0} fade speed={comfortMode ? 1 : 1.8} />
-        <Ufo radius={19} speed={0.12} height={7} phase={0} color="#22d3ee" motionFactor={motionFactor} />
-        <Ufo radius={16} speed={0.08} height={9} phase={1.8} color="#a855f7" motionFactor={motionFactor} />
+        <Stars radius={120} depth={60} count={7000} factor={7} saturation={0} fade speed={1.8} />
+        <Ufo radius={19} speed={0.12} height={7} phase={0} color="#22d3ee" motionFactor={1} />
+        <Ufo radius={16} speed={0.08} height={9} phase={1.8} color="#a855f7" motionFactor={1} />
         
-        <BackgroundField params={params} comfortMode={comfortMode} />
+        <BackgroundField params={params} />
         <QuantumSurface params={params} active={isCollapsing} />
 
         <Float speed={1.4} rotationIntensity={0.15} floatIntensity={0.4}>
@@ -354,13 +331,13 @@ const AtomScene = ({ atomType, isCollapsing, params, comfortMode }: AtomScenePro
                   tiltZ={orbital.tiltZ}
                   startOffset={orbital.startOffset}
                   color={i === 2 ? "#fbbf24" : i === 1 ? "#34d399" : "#60a5fa"} 
-                  motionFactor={motionFactor}
-                  glowFactor={glowFactor}
+                  motionFactor={1}
+                  glowFactor={1}
                 />
               );
             })}
             
-            <ProbabilityWave active={isCollapsing} params={params} comfortMode={comfortMode} />
+            <ProbabilityWave active={isCollapsing} params={params} />
           </group>
         </Float>
         

@@ -61,7 +61,6 @@ const App: React.FC = () => {
   const [usageCount, setUsageCount] = useState<number>(0);
   const [showPaywall, setShowPaywall] = useState<boolean>(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState<boolean>(false);
-  const [comfortMode, setComfortMode] = useState<boolean>(false);
   const [selfieData, setSelfieData] = useState<string | null>(null);
   const [selfieConsent, setSelfieConsent] = useState<boolean>(false);
   const [selfieUrl, setSelfieUrl] = useState<string>('');
@@ -332,7 +331,7 @@ const App: React.FC = () => {
                     <p className="text-gray-400 text-sm leading-relaxed">One tap to start, no accounts required, tiny rituals you can do in under a minute.</p>
                   </div>
                   <div className="liquid-card p-4 rounded-2xl border border-emerald-500/10">
-                    <p className="text-[10px] text-emerald-300 uppercase font-black tracking-[0.25em] mb-1">Comfortable Aesthetic</p>
+                    <p className="text-[10px] text-emerald-300 uppercase font-black tracking-[0.25em] mb-1">Smooth Visuals</p>
                     <p className="text-gray-400 text-sm leading-relaxed">Soft glows, fluid motion, and cinematic lighting tuned for calm—without promising outcomes.</p>
                   </div>
                 </div>
@@ -492,7 +491,6 @@ const App: React.FC = () => {
               atomType={selectedAtom} 
               isCollapsing={state.isCollapsing} 
               params={waveParams}
-              comfortMode={comfortMode}
             />
           </div>
         )}
