@@ -55,7 +55,7 @@ const VISUAL_STYLES = [
 const App: React.FC = () => {
   const [isStarted, setIsStarted] = useState<boolean>(false);
   const [selectedAtom, setSelectedAtom] = useState<AtomType>('Hydrogen');
-  const [selectedEntity, setSelectedEntity] = useState<EntityType>('Frog');
+  const [selectedEntity, setSelectedEntity] = useState<EntityType>('arctic fox');
   const [waveParams, setWaveParams] = useState<WaveParams>({ wavelength: 1.0, amplitude: 1.0 });
   const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
   const [usageCount, setUsageCount] = useState<number>(0);
