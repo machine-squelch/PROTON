@@ -93,7 +93,7 @@ const Electron: React.FC<ElectronProps> = ({ radius, speed, color, tiltX = 0, ti
       <group ref={meshRef}>
         <Trail
           width={1.2}
-          length={Math.max(1, 9 * (1 + (1 - motionFactor) * 0.3))}
+          length={Math.max(1, 18 * (1 + (1 - motionFactor) * 0.3))}
           color={new THREE.Color(color)}
           attenuation={(t) => Math.max(0, Math.pow(t, 1.25))}
           decay={0.85}

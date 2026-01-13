@@ -471,7 +471,7 @@ const App: React.FC = () => {
           </div>
         </div>
         
-        <div className="flex gap-4">
+        <div className="flex gap-4 mr-2">
           {!isSubscribed && (
             <button 
               onClick={() => setShowPaywall(true)}
