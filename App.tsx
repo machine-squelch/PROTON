@@ -552,6 +552,20 @@ const App: React.FC = () => {
               </div>
 
               <div className="liquid-card p-4 rounded-3xl space-y-3">
+
+                <p className="text-[10px] text-blue-300 uppercase font-black tracking-[0.2em]">Comfort + Selfie Imprint</p>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setComfortMode(c => !c)}
+                    className={`px-3 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] border ${comfortMode ? 'bg-emerald-600 border-emerald-400 text-white' : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10'}`}
+                  >
+                    Comfort Mode: {comfortMode ? 'On' : 'Off'}
+                  </button>
+                  <p className="text-[11px] text-gray-500">Softens motion/glow for gentler viewing.</p>
+                </div>
+                
+                    /* TODO: Selfie card temporarily disabled - re-enable when feature is ready
+=======
                 <p className="text-[10px] text-blue-300 uppercase font-black tracking-[0.2em]">Selfie Imprint</p>
                 <div className="bg-white/5 rounded-2xl p-3 border border-white/5">
                   <div className="flex items-center justify-between mb-2">
@@ -594,6 +608,8 @@ const App: React.FC = () => {
                   {(selfieUrl.trim() || selfieData) && <p className="text-[11px] text-emerald-400 mt-1">Selfie attached.</p>}
                   {!selfieData && !selfieConsent && <p className="text-[11px] text-gray-500 mt-1">Enable consent to attach a photo.</p>}
                 </div>
+                */}
+                {/* Note: handleSelfieUpload is intentionally kept defined for when the selfie feature is re-enabled. */}
               </div>
             </div>
 
