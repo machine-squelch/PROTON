@@ -3,68 +3,59 @@ import AtomScene from './components/AtomScene';
 import { QuantumAI } from './services/geminiService';
 import { QuantumState, AtomType, WaveParams, EntityType } from './types';
 
-const CREATURES: EntityType[] = [
-  'bioluminescent jellyfish',
-  'ancient turtle',
-  'winged unicorn',
-  'mythic phoenix',
-  'deep-sea leviathan',
-  'forest spirit',
-  'cosmic dragon',
-  'astral stag',
-  'luminescent orchid mantis',
-  'cybernetic wolf',
-  'nebula manta ray',
-  'auroral kraken',
-  'starforged griffin',
-  'quantum fox',
-  'luminous kelpie',
-  'electromagnetic serpent'
+const ANIMALS: EntityType[] = [
+  'arctic fox',
+  'great white shark',
+  'blue whale',
+  'emperor penguin',
+  'golden eagle',
+  'snow leopard',
+  'giant octopus',
+  'hummingbird',
+  'manta ray',
+  'wolf',
+  'jellyfish',
+  'owl',
+  'sea turtle',
+  'coral reef fish',
+  'dragonfly',
+  'peacock'
 ];
 
-const COSMIC_PHENOMENA: EntityType[] = [
-  'nebula bloom',
-  'solar flare cresting over the sun',
-  'aurora on Jupiter',
-  'storm on Saturn',
-  'icy plume on Enceladus',
-  'Martian dust devil',
-  'luminous comet tail',
-  'spiral galaxy core',
-  'pulsar lighthouse',
-  'dark-matter filament',
-  'event-horizon spray',
-  'gravitational lens halo',
-  'quasar jet ribbon',
-  'cosmic ray shower',
-  'magnetar flare'
+const SPACE_PHENOMENA: EntityType[] = [
+  'spiral galaxy',
+  'supernova explosion',
+  'aurora borealis',
+  'solar flare',
+  'black hole accretion disk',
+  'planetary nebula',
+  'comet tail',
+  'Saturn\'s rings',
+  'Jupiter\'s great red spot',
+  'Milky Way core',
+  'neutron star',
+  'asteroid field',
+  'lunar eclipse',
+  'meteor shower',
+  'interstellar dust cloud',
+  'pulsar beam'
 ];
 
-const ADJECTIVES = [
-  'prismatic',
-  'radiant',
-  'electroluminescent',
-  'superfluid',
-  'ancient',
-  'hyper-kinetic',
-  'holographic',
+const VISUAL_STYLES = [
+  'bioluminescent',
+  'ethereal',
+  'iridescent',
   'crystalline',
-  'plasma-sheathed',
-  'mycelial'
-];
-
-const HYBRIDS = [
-  'nebula-borne hydra',
-  'solar-sailed leviathan',
-  'aurora-crowned titan',
-  'quasar-kissed phoenix',
-  'gravity-bent wyrm'
+  'radiant',
+  'translucent',
+  'shimmering',
+  'luminous'
 ];
 
 const App: React.FC = () => {
   const [isStarted, setIsStarted] = useState<boolean>(false);
   const [selectedAtom, setSelectedAtom] = useState<AtomType>('Hydrogen');
-  const [selectedEntity, setSelectedEntity] = useState<EntityType>('Frog');
+  const [selectedEntity, setSelectedEntity] = useState<EntityType>('arctic fox');
   const [waveParams, setWaveParams] = useState<WaveParams>({ wavelength: 1.0, amplitude: 1.0 });
   const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
   const [usageCount, setUsageCount] = useState<number>(0);
@@ -98,13 +89,17 @@ const App: React.FC = () => {
   }, [usageCount]);
 
   const pickRandomSubject = useCallback((): EntityType => {
-    const pools = [
-      () => `${ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)]} ${CREATURES[Math.floor(Math.random() * CREATURES.length)]}`,
-      () => `${ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)]} ${COSMIC_PHENOMENA[Math.floor(Math.random() * COSMIC_PHENOMENA.length)]}`,
-      () => HYBRIDS[Math.floor(Math.random() * HYBRIDS.length)]
-    ];
-    const variant = Math.floor(Math.random() * pools.length);
-    return pools[variant]();
+    // 50/50 split between animals and space phenomena
+    const isAnimal = Math.random() < 0.5;
+    const style = VISUAL_STYLES[Math.floor(Math.random() * VISUAL_STYLES.length)];
+    
+    if (isAnimal) {
+      const animal = ANIMALS[Math.floor(Math.random() * ANIMALS.length)];
+      return `${style} ${animal}`;
+    } else {
+      const phenomenon = SPACE_PHENOMENA[Math.floor(Math.random() * SPACE_PHENOMENA.length)];
+      return `${style} ${phenomenon}`;
+    }
   }, []);
 
   const handleStart = () => {
@@ -223,7 +218,7 @@ const App: React.FC = () => {
               </span>
               <div>
                 <p className="text-sm font-black tracking-tight uppercase">PROTON FIELD</p>
-                <p className="text-xs text-blue-400 font-mono uppercase tracking-[0.2em]">Sub-Atomic Time Traveling Quantum-Wave Collapsing Creature Creator</p>
+                <p className="text-xs text-blue-400 font-mono uppercase tracking-[0.2em]">Quantum Wave-Collapse Visualizer</p>
               </div>
             </div>
             <button
@@ -242,10 +237,10 @@ const App: React.FC = () => {
                     <i className="fas fa-bolt"></i> Stress Escape Protocol
                   </p>
                   <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.05] uppercase">
-                    Sub-Atomic Time-Traveling Quantum Wave-Collapsing Creature Creator
+                    Quantum Wave-Collapse Visualizer
                   </h1>
                   <p className="text-gray-300 text-lg leading-relaxed">
-                    Drift into an immersive, cinematic quantum lab. Collapse waves, watch mythic lifeforms flicker into view, and let the minutes dissolve while you play with impossible physics. No medical claims—just a mesmerizing way to pass the time.
+                    Drift into an immersive, cinematic quantum lab. Collapse waves, watch animals and cosmic phenomena flicker into view, and let the minutes dissolve while you play with impossible physics. No medical claims—just a mesmerizing way to pass the time.
                   </p>
                 </div>
 
@@ -286,7 +281,7 @@ const App: React.FC = () => {
                     <div className="p-6 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <p className="text-xs uppercase tracking-[0.2em] text-gray-400">Quantum-Wave Collapsing Creature Creator</p>
+                        <p className="text-xs uppercase tracking-[0.2em] text-gray-400">Quantum Wave-Collapse Visualizer</p>
                       </div>
                       <p className="text-[10px] text-blue-300 uppercase font-black tracking-[0.25em]">Sub-Atomic Time Travel</p>
                     </div>
@@ -294,10 +289,10 @@ const App: React.FC = () => {
                       <div className="text-center px-6">
                         <p className="text-[12px] uppercase tracking-[0.3em] text-blue-200">Preview</p>
                         <h3 className="text-2xl md:text-3xl font-black tracking-tight mt-2 text-gray-50">
-                          Waves collapsing into mythic life
+                          Waves collapsing into form
                         </h3>
                         <p className="text-gray-400 mt-4 leading-relaxed">
-                          Turquoise and emerald energy streams fold into creatures and cosmic storms while you watch.
+                          Turquoise and emerald energy streams fold into animals and cosmic phenomena while you watch.
                         </p>
                       </div>
                     </div>
@@ -329,7 +324,7 @@ const App: React.FC = () => {
                 </p>
                 <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-4 uppercase">Why This Exists</h2>
                 <p className="text-gray-300 text-lg leading-relaxed mb-4">
-                  Built for micro-escapes between tasks, Proton Field is a sensory toy box: spark a collapse, watch a creature or cosmic event emerge, and let the visuals carry you for a minute. It borrows from science museums, ambient games, and music visualizers to make downtime feel intentional—not wasted.
+                  Built for micro-escapes between tasks, Proton Field is a sensory toy box: spark a collapse, watch an animal or cosmic phenomenon emerge, and let the visuals carry you for a minute. It borrows from science museums, ambient games, and music visualizers to make downtime feel intentional—not wasted.
                 </p>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="liquid-card p-4 rounded-2xl border border-blue-500/10">
@@ -374,7 +369,7 @@ const App: React.FC = () => {
                 <div className="grid sm:grid-cols-2 gap-4 w-full lg:w-auto lg:min-w-[320px]">
                   <div className="liquid-card p-4 rounded-2xl border border-blue-500/10">
                     <p className="text-[10px] text-blue-300 uppercase font-black tracking-[0.25em] mb-1">Eras</p>
-                    <p className="text-gray-400 text-sm leading-relaxed">Inflation → plasma seas → atoms → stars → creatures. Each collapse nods to a different chapter.</p>
+                    <p className="text-gray-400 text-sm leading-relaxed">Inflation → plasma seas → atoms → stars → life. Each collapse nods to a different chapter.</p>
                   </div>
                   <div className="liquid-card p-4 rounded-2xl border border-emerald-500/10">
                     <p className="text-[10px] text-emerald-300 uppercase font-black tracking-[0.25em] mb-1">Perception</p>
@@ -467,7 +462,7 @@ const App: React.FC = () => {
             <span className="bg-blue-600 p-1 rounded-lg group-hover:rotate-12 transition-transform duration-500 shadow-lg shadow-blue-600/30">
               <i className="fas fa-atom"></i>
             </span>
-            PROTON<span className="text-blue-500"> FIELD</span> <span className="text-gray-400">Sub-Atomic Time Traveling Quantum-Wave Collapsing Creature Creator</span>
+            PROTON<span className="text-blue-500"> FIELD</span> <span className="text-gray-400">Quantum Wave-Collapse Visualizer</span>
           </h1>
           <div className="flex items-center gap-3 mt-1">
             <span className={`w-2 h-2 rounded-full ${isSubscribed ? 'bg-blue-500 animate-pulse' : 'bg-green-500'}`}></span>
@@ -576,7 +571,7 @@ const App: React.FC = () => {
                       <button className="text-[10px] text-red-400 uppercase font-black" onClick={() => setSelfieData(null)}>Clear</button>
                     )}
                   </div>
-                  <p className="text-[11px] text-gray-400 mb-2">Uploads your face to blend onto the creature/planet head. Sent to the image API only for generation and deleted immediately after a successful render.</p>
+                  <p className="text-[11px] text-gray-400 mb-2">Uploads your face to blend onto the generated subject. Sent to the image API only for generation and deleted immediately after a successful render.</p>
                   <label className="flex items-center gap-2 text-[11px] text-gray-300 mb-2">
                     <input
                       type="checkbox"
