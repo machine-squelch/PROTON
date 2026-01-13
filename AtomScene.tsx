@@ -2,7 +2,7 @@ import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame, ThreeElements } from '@react-three/fiber';
 import { OrbitControls, Stars, Float, MeshDistortMaterial, Points, PointMaterial, Trail } from '@react-three/drei';
 import * as THREE from 'three';
-import { AtomType, ATOM_CONFIGS, WaveParams } from '../types';
+import { AtomType, ATOM_CONFIGS, WaveParams } from './types';
 import { useThree } from '@react-three/fiber';
 
 // Correctly extend React.JSX IntrinsicElements to include Three.js elements supported by @react-three/fiber.

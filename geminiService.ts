@@ -1,4 +1,4 @@
-import { AtomType, WaveParams, EntityType } from "../types";
+import { AtomType, WaveParams, EntityType } from "./types";
 
 type SDResponse =
   | { images?: string[]; output?: string[]; image?: string; error?: string }
