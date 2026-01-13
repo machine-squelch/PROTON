@@ -326,7 +326,8 @@ const AtomScene = ({ atomType, isCollapsing, params, comfortMode }: AtomScenePro
 
   return (
     <div className="w-full h-full relative">
-      <Canvas camera={{ position: [10, 6, 10], fov: 38 }} gl={{ antialias: true }}>
+      <Canvas camera={{ position: [14, 8, 14], fov: 38 }} gl={{ antialias: true }}>
+        <color attach="background" args={["#020104"]} />
         <ComfortBreath comfortMode={comfortMode} />
         <color attach="background" args={["#020104"]} />
         <ambientLight intensity={0.6} />
