@@ -64,6 +64,7 @@ const App: React.FC = () => {
   const [selfieData, setSelfieData] = useState<string | null>(null);
   const [selfieConsent, setSelfieConsent] = useState<boolean>(false);
   const [selfieUrl, setSelfieUrl] = useState<string>('');
+  const [comfortMode, setComfortMode] = useState<boolean>(false);
   const pendingAutoCollapseRef = useRef<boolean>(false);
   
   const [state, setState] = useState<QuantumState>({
@@ -564,8 +565,7 @@ const App: React.FC = () => {
                   <p className="text-[11px] text-gray-500">Softens motion/glow for gentler viewing.</p>
                 </div>
                 
-                    /* TODO: Selfie card temporarily disabled - re-enable when feature is ready
-=======
+                {/* TODO: Selfie card temporarily disabled - re-enable when feature is ready
                 <p className="text-[10px] text-blue-300 uppercase font-black tracking-[0.2em]">Selfie Imprint</p>
                 <div className="bg-white/5 rounded-2xl p-3 border border-white/5">
                   <div className="flex items-center justify-between mb-2">

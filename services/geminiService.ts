@@ -4,9 +4,12 @@ type SDResponse =
   | { images?: string[]; output?: string[]; image?: string; error?: string }
   | { error: string };
 
-// Base and endpoint are configurable so we can match different providers.
-const SD_API_BASE = import.meta.env.VITE_SD_API_BASE_URL || "https://modelslab.com";
-// If a full endpoint is provided, use it as-is. Otherwise, append the default path once.
+// Using Pollinations.ai - a completely free image generation API that requires no API key
+// Users can override with their own API by setting environment variables
+const SD_API_BASE = import.meta.env.VITE_SD_API_BASE_URL || "https://image.pollinations.ai";
+const USE_POLLINATIONS = !import.meta.env.VITE_SD_API_BASE_URL; // Use Pollinations if no custom API is set
+
+// For custom APIs (like ModelsLab), these configurations apply
 const SD_ENDPOINT = (() => {
   const envEndpoint = import.meta.env.VITE_SD_ENDPOINT;
   if (envEndpoint) return envEndpoint;
@@ -148,6 +151,21 @@ export class QuantumAI {
     const prompt = this.buildPrompt(atom, entity, params);
     const seed = Math.floor(Math.random() * 10_000_000);
 
+    // Use Pollinations.ai free API if no custom API is configured
+    if (USE_POLLINATIONS && !options?.baseImage) {
+      // Pollinations.ai uses a simple GET request with URL-encoded prompt
+      const encodedPrompt = encodeURIComponent(prompt);
+      const pollinationsUrl = `${SD_API_BASE}/prompt/${encodedPrompt}?width=${SD_WIDTH}&height=${SD_HEIGHT}&seed=${seed}&nologo=true`;
+      
+      try {
+        // Pollinations returns the image directly
+        return pollinationsUrl;
+      } catch (error) {
+        throw new Error(`Pollinations.ai request failed: ${error}`);
+      }
+    }
+
+    // For custom APIs or img2img operations, use the original implementation
     const basePayload: Record<string, any> = {
       model_id: SD_MODEL,
       prompt,
