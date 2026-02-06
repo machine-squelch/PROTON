@@ -134,6 +134,10 @@ const App: React.FC = () => {
     const subject = pickRandomSubject();
     setSelectedEntity(subject);
 
+    // Track when the collapse started to ensure minimum loading display time
+    const collapseStartTime = Date.now();
+    const MIN_LOADING_TIME = 800; // Minimum time to show loading indicator (ms)
+
     try {
       const baseImage = selfieUrl.trim() || selfieData || undefined;
       const [imageUrl, explanation] = await Promise.all([
@@ -148,6 +152,10 @@ const App: React.FC = () => {
         setSelfieData(null); // drop selfie after successful generation
         setSelfieUrl('');
         
+        // Calculate remaining time to meet minimum loading display
+        const elapsedTime = Date.now() - collapseStartTime;
+        const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsedTime);
+        
         // Add a smooth transition delay before showing the result
         setTimeout(() => {
           setState(prev => ({
@@ -157,22 +165,33 @@ const App: React.FC = () => {
             collapsedImage: imageUrl,
             explanation: explanation
           }));
-        }, 300); // Brief delay for smooth animation transition
+        }, remainingTime + 300); // Additional delay for smooth animation transition
       };
       img.onerror = () => {
-        // If image fails to load, still show the result but with an error state
-        console.error('Image failed to load:', imageUrl);
-        setState(prev => ({ 
-          ...prev, 
-          isCollapsing: false, 
-          error: 'Image generated but failed to load. Please try again.' 
-        }));
+        // If image fails to load, ensure minimum loading time has passed
+        const elapsedTime = Date.now() - collapseStartTime;
+        const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsedTime);
+        
+        setTimeout(() => {
+          console.error('Image failed to load:', imageUrl);
+          setState(prev => ({ 
+            ...prev, 
+            isCollapsing: false, 
+            error: 'Image generated but failed to load. Please try again.' 
+          }));
+        }, remainingTime);
       };
       img.src = imageUrl;
     } catch (err: any) {
-      console.error(err);
-      const msg = err?.message ? `Quantum decoherence failed: ${err.message}` : "Quantum decoherence failed. Check your Stable Diffusion endpoint and key.";
-      setState(prev => ({ ...prev, isCollapsing: false, error: msg }));
+      // Ensure minimum loading time has passed before showing error
+      const elapsedTime = Date.now() - collapseStartTime;
+      const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsedTime);
+      
+      setTimeout(() => {
+        console.error(err);
+        const msg = err?.message ? `Quantum decoherence failed: ${err.message}` : "Quantum decoherence failed. Check your Stable Diffusion endpoint and key.";
+        setState(prev => ({ ...prev, isCollapsing: false, error: msg }));
+      }, remainingTime);
     }
   }, [selectedAtom, waveParams, usageCount, isSubscribed, pickRandomSubject, selfieData, selfieUrl]);
 
