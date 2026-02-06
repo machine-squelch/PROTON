@@ -137,6 +137,7 @@ const App: React.FC = () => {
     // Track when the collapse started to ensure minimum loading display time
     const collapseStartTime = Date.now();
     const MIN_LOADING_TIME = 800; // Minimum time to show loading indicator (ms)
+    const TRANSITION_DELAY = 300; // Additional delay for smooth animation transition (ms)
 
     try {
       const baseImage = selfieUrl.trim() || selfieData || undefined;
@@ -165,7 +166,7 @@ const App: React.FC = () => {
             collapsedImage: imageUrl,
             explanation: explanation
           }));
-        }, remainingTime + 300); // Additional delay for smooth animation transition
+        }, remainingTime + TRANSITION_DELAY);
       };
       img.onerror = () => {
         // If image fails to load, ensure minimum loading time has passed
