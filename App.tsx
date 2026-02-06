@@ -141,22 +141,40 @@ const App: React.FC = () => {
         QuantumAI.explainCollapse(selectedAtom, subject)
       ]);
 
-      setUsageCount(prev => prev + 1);
-      setSelfieData(null); // drop selfie after successful generation
-      setSelfieUrl('');
-      setState(prev => ({
-        ...prev,
-        isCollapsing: false,
-        isCollapsed: true,
-        collapsedImage: imageUrl,
-        explanation: explanation
-      }));
+      // Preload the image to ensure it's ready before showing the result view
+      const img = new Image();
+      img.onload = () => {
+        setUsageCount(prev => prev + 1);
+        setSelfieData(null); // drop selfie after successful generation
+        setSelfieUrl('');
+        
+        // Add a smooth transition delay before showing the result
+        setTimeout(() => {
+          setState(prev => ({
+            ...prev,
+            isCollapsing: false,
+            isCollapsed: true,
+            collapsedImage: imageUrl,
+            explanation: explanation
+          }));
+        }, 300); // Brief delay for smooth animation transition
+      };
+      img.onerror = () => {
+        // If image fails to load, still show the result but with an error state
+        console.error('Image failed to load:', imageUrl);
+        setState(prev => ({ 
+          ...prev, 
+          isCollapsing: false, 
+          error: 'Image generated but failed to load. Please try again.' 
+        }));
+      };
+      img.src = imageUrl;
     } catch (err: any) {
       console.error(err);
       const msg = err?.message ? `Quantum decoherence failed: ${err.message}` : "Quantum decoherence failed. Check your Stable Diffusion endpoint and key.";
       setState(prev => ({ ...prev, isCollapsing: false, error: msg }));
     }
-  }, [selectedAtom, waveParams, usageCount, isSubscribed, pickRandomSubject, selfieData]);
+  }, [selectedAtom, waveParams, usageCount, isSubscribed, pickRandomSubject, selfieData, selfieUrl]);
 
   useEffect(() => {
     if (!isStarted) return;
@@ -493,6 +511,27 @@ const App: React.FC = () => {
               isCollapsing={state.isCollapsing} 
               params={waveParams}
             />
+            {/* Loading indicator overlay during collapse */}
+            {state.isCollapsing && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 backdrop-blur-sm z-10 animate-in fade-in duration-500">
+                <div className="text-center space-y-6">
+                  <div className="relative">
+                    <i className="fas fa-atom text-6xl text-blue-500 animate-spin" style={{ animationDuration: '3s' }}></i>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-20 h-20 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-xl font-black uppercase tracking-widest text-white">Collapsing Wavefunction</p>
+                    <p className="text-sm text-blue-400 font-mono uppercase tracking-wider">Generating quantum manifestation...</p>
+                  </div>
+                  <div className="flex items-center gap-2 text-emerald-400">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span className="text-xs uppercase tracking-widest">AI Processing</span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </main>
