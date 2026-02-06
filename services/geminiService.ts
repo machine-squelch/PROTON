@@ -21,8 +21,8 @@ const SD_IMG2IMG_ENDPOINT =
 const SD_API_KEY = import.meta.env.VITE_SD_API_KEY || "";
 const SD_API_KEY_HEADER = import.meta.env.VITE_SD_API_KEY_HEADER || ""; // e.g., "X-API-KEY"; leave blank to omit
 const SD_MODEL = import.meta.env.VITE_SD_MODEL || "flux-2-dev"; // defaults to your provided model
-const SD_WIDTH = import.meta.env.VITE_SD_WIDTH || "1024";
-const SD_HEIGHT = import.meta.env.VITE_SD_HEIGHT || "1024";
+const SD_WIDTH = Number(import.meta.env.VITE_SD_WIDTH || "1024");
+const SD_HEIGHT = Number(import.meta.env.VITE_SD_HEIGHT || "1024");
 const SD_SAMPLES = Number(import.meta.env.VITE_SD_SAMPLES || 1); // single image to match UI expectations
 
 export class QuantumAI {
@@ -157,12 +157,8 @@ export class QuantumAI {
       const encodedPrompt = encodeURIComponent(prompt);
       const pollinationsUrl = `${SD_API_BASE}/prompt/${encodedPrompt}?width=${SD_WIDTH}&height=${SD_HEIGHT}&seed=${seed}&nologo=true`;
       
-      try {
-        // Pollinations returns the image directly
-        return pollinationsUrl;
-      } catch (error) {
-        throw new Error(`Pollinations.ai request failed: ${error}`);
-      }
+      // Pollinations returns the image directly as a URL
+      return pollinationsUrl;
     }
 
     // For custom APIs or img2img operations, use the original implementation
